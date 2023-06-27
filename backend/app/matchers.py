@@ -23,6 +23,9 @@ class RuleMatcher:
             return False
 
         expected = rule.value_list()
+        if not expected:
+            return False
+
         op = rule.operator
 
         if op == "in":
