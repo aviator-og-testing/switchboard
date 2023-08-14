@@ -10,11 +10,16 @@ export API_PORT := api_port
 default:
     @just --list
 
-# install everything and seed the database
+# install everything, migrate and seed the database
 setup:
     cd backend && uv sync
     cd frontend && npm install
+    cd backend && uv run alembic upgrade head
     cd backend && uv run python seed.py
+
+# run pending migrations
+migrate:
+    cd backend && uv run alembic upgrade head
 
 # api and admin ui together
 dev: setup

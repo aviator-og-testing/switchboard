@@ -46,3 +46,19 @@ If those ports are busy, `UI_PORT=3001 API_PORT=5001 just dev`.
 `just reset` drops the local database.
 
 Production runs on Postgres. Set `DATABASE_URL` to point at it.
+
+## Migrations
+
+Alembic, under `backend/migrations`. The service ran on `create_all` until
+2023, so the first revision is a baseline of the schema as it was already
+running in prod. Anything that changes the schema needs a revision.
+
+```
+cd backend
+uv run alembic revision --autogenerate -m "what changed"
+uv run alembic upgrade head
+```
+
+`just migrate` runs anything pending. Note that `seed.py` still calls
+`create_all`, which is convenient locally and will hide a missing revision
+until deploy.
