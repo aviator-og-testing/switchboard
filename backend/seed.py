@@ -65,6 +65,14 @@ def main():
                     values="4.2.0",
                     variant="on",
                 ),
+                TargetingRule(
+                    flag_id=billing.id,
+                    priority=0,
+                    attribute="account_id",
+                    operator="in",
+                    values="acct_1041,acct_2277",
+                    variant="on",
+                ),
             ]
         )
 

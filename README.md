@@ -10,6 +10,24 @@ Feature flag service. Backend is Flask and SQLAlchemy, admin UI is React.
 
 Bucketing is stable for a given flag and user. Flags created before the salt change carry `bucketing_version = 1` so their existing buckets don't move.
 
+## Context
+
+The SDK sends a context with every evaluation. `user_id` is the only one the
+service depends on, it's what bucketing hashes. Everything else is whatever the
+caller put in, and rules match against it by name. In practice we get:
+
+```
+user_id
+account_id     the tenant the user belongs to, sent on every request
+plan
+email
+region
+app_version
+```
+
+The batch endpoint is called once per account on startup, so a single batch is
+always one account's users.
+
 ## Layout
 
 ```
