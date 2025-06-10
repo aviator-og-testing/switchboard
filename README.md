@@ -30,11 +30,28 @@ calls this on startup.
 `GET /api/flags/check` is the old single flag endpoint. The 3.x mobile clients
 still use it. Nothing new should.
 
-## Running it
+## Running it locally
 
 ```
-cd backend && pip install -r requirements.txt && flask run
-cd frontend && npm install && npm start
+cd backend
+uv sync
+export DATABASE_URL=sqlite:///switchboard.db SWITCHBOARD_API_KEYS=dev
+uv run python seed.py
+uv run flask --app app run
 ```
 
-You need Postgres on 5432. The compose file is out of date, don't use it.
+Then in a second shell:
+
+```
+cd frontend
+npm install
+REACT_APP_API_KEY=dev npm start
+```
+
+The admin UI comes up on :3000 and proxies the API to :5000. Seed data is
+three flags with a few targeting rules on them.
+
+Production runs on Postgres. Set `DATABASE_URL` to point at it.
+
+Tests are `uv run pytest` from `backend/`. They use stubs, so no database is
+needed.

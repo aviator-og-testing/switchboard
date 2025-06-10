@@ -1,6 +1,8 @@
 import os
 
-DATABASE_URL = "postgresql://switchboard:switchboard@localhost:5432/switchboard"
+DATABASE_URL = os.environ.get(
+    "DATABASE_URL", "postgresql://switchboard:switchboard@localhost:5432/switchboard"
+)
 
 REDIS_HOST = "localhost"
 REDIS_PORT = 6379

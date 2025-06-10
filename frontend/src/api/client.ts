@@ -1,13 +1,14 @@
 import { Flag, TargetingRule } from "../types";
 
-const BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
+const BASE = process.env.REACT_APP_API_BASE || "";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
-      "X-Api-Key": localStorage.getItem("apiKey") || "",
+      "X-Api-Key":
+        localStorage.getItem("apiKey") || process.env.REACT_APP_API_KEY || "",
       ...(init?.headers || {}),
     },
   });

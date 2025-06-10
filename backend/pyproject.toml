@@ -1,0 +1,18 @@
+[project]
+name = "switchboard"
+version = "0.4.2"
+description = "Feature flag service"
+requires-python = ">=3.11"
+dependencies = [
+    "Flask==2.3.3",
+    "SQLAlchemy==2.0.52",
+    "psycopg2-binary==2.9.10",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==7.4.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
