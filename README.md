@@ -33,25 +33,16 @@ still use it. Nothing new should.
 ## Running it locally
 
 ```
-cd backend
-uv sync
-export DATABASE_URL=sqlite:///switchboard.db SWITCHBOARD_API_KEYS=dev
-uv run python seed.py
-uv run flask --app app run
+just dev
 ```
 
-Then in a second shell:
+That installs both sides, seeds a SQLite database and brings up the API on
+:5000 and the admin UI on :3000. Seed data is three flags with targeting rules
+on them.
 
-```
-cd frontend
-npm install
-REACT_APP_API_KEY=dev npm start
-```
+If those ports are busy, `UI_PORT=3001 API_PORT=5001 just dev`.
 
-The admin UI comes up on :3000 and proxies the API to :5000. Seed data is
-three flags with a few targeting rules on them.
+`just test` runs the backend tests. They use stubs, so no database is needed.
+`just reset` drops the local database.
 
 Production runs on Postgres. Set `DATABASE_URL` to point at it.
-
-Tests are `uv run pytest` from `backend/`. They use stubs, so no database is
-needed.
