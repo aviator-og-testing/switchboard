@@ -5,8 +5,12 @@ Feature flag service. Backend is Flask and SQLAlchemy, admin UI is React.
 ## How a flag evaluates
 
 1. If the flag is disabled, everyone gets `default_variant`.
-2. Targeting rules are checked in priority order. First match wins and returns that rule's variant.
+2. Targeting rules are checked in priority order. First match wins and returns that rule's variant. A rule either carries its own attribute and operator, or points at a segment.
 3. If no rule matches, the user is bucketed against `rollout_percentage`. Inside the percentage gets `on`, outside gets `default_variant`.
+
+Segments are named rule sets that several flags can share. A segment matches if
+any of its rules match, or if the user falls inside the segment's own rollout
+percentage.
 
 Bucketing is stable for a given flag and user. Flags created before the salt change carry `bucketing_version = 1` so their existing buckets don't move.
 

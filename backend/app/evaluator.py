@@ -6,6 +6,7 @@ from sqlalchemy import select
 from . import config
 from .matchers import RuleMatcher
 from .models import TargetingRule
+from .segments import SegmentResolver
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ class FlagEvaluator:
     def __init__(self, session):
         self.session = session
         self.matcher = RuleMatcher()
+        self.segments = SegmentResolver(session)
 
     def evaluate(self, flag, context):
         if not flag.enabled:
@@ -42,6 +44,11 @@ class FlagEvaluator:
         )
 
         for rule in rules:
+            if rule.segment_id is not None:
+                if self.segments.matches(rule.segment_id, context):
+                    return rule.variant
+                continue
+
             if self.matcher.matches(rule, context):
                 return rule.variant
 
