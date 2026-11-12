@@ -49,6 +49,15 @@ frontend/src/components    admin UI
 `POST /api/v1/evaluate/batch` does the same for many contexts at once. The SDK
 calls this on startup.
 
+```
+curl -s localhost:5000/api/v1/evaluate/batch \
+  -H 'X-Api-Key: dev' -H 'Content-Type: application/json' \
+  -d '{"contexts": [
+        {"user_id": "u1", "account_id": "acct_88", "plan": "enterprise"},
+        {"user_id": "u2", "account_id": "acct_88", "plan": "free"}
+      ]}'
+```
+
 `GET /api/flags/check` is the old single flag endpoint. The 3.x mobile clients
 still use it. Nothing new should.
 
