@@ -5,8 +5,12 @@ Feature flag service. Backend is Flask and SQLAlchemy, admin UI is React.
 ## How a flag evaluates
 
 1. If the flag is disabled, everyone gets `default_variant`.
-2. Targeting rules are checked in priority order. First match wins and returns that rule's variant.
+2. Targeting rules are checked in priority order. First match wins and returns that rule's variant. A rule either carries its own attribute and operator, or points at a segment.
 3. If no rule matches, the user is bucketed against `rollout_percentage`. Inside the percentage gets `on`, outside gets `default_variant`.
+
+Segments are named rule sets that several flags can share. A segment matches if
+any of its rules match, or if the user falls inside the segment's own rollout
+percentage.
 
 Bucketing is stable for a given flag and user. Flags created before the salt change carry `bucketing_version = 1` so their existing buckets don't move.
 
@@ -44,6 +48,15 @@ frontend/src/components    admin UI
 
 `POST /api/v1/evaluate/batch` does the same for many contexts at once. The SDK
 calls this on startup.
+
+```
+curl -s localhost:5000/api/v1/evaluate/batch \
+  -H 'X-Api-Key: dev' -H 'Content-Type: application/json' \
+  -d '{"contexts": [
+        {"user_id": "u1", "account_id": "acct_88", "plan": "enterprise"},
+        {"user_id": "u2", "account_id": "acct_88", "plan": "free"}
+      ]}'
+```
 
 `GET /api/flags/check` is the old single flag endpoint. The 3.x mobile clients
 still use it. Nothing new should.

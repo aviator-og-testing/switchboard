@@ -31,15 +31,36 @@ class FakeSession:
 
 
 class StubRule:
-    def __init__(self, attribute, operator, values, variant, priority=0):
+    def __init__(self, attribute, operator, values, variant, priority=0, segment_id=None):
         self.attribute = attribute
         self.operator = operator
         self.values = values
         self.variant = variant
         self.priority = priority
+        self.segment_id = segment_id
 
     def value_list(self):
         return [v for v in self.values.split(",") if v]
+
+
+class StubSegmentRule:
+    def __init__(self, attribute, operator, values, priority=0):
+        self.attribute = attribute
+        self.operator = operator
+        self.values = values
+        self.priority = priority
+
+    def value_list(self):
+        return [v for v in self.values.split(",") if v]
+
+
+class StubSegment:
+    def __init__(self, key, rules=None, rollout=0):
+        self.id = 7
+        self.key = key
+        self.name = key
+        self.rollout_percentage = rollout
+        self.rules = rules or []
 
 
 class StubFlag:
